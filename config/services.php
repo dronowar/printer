@@ -34,4 +34,11 @@ return [
 		'secret' => '',
 	],
 
+	'google' => [
+		'client_id'     => '402821806731-bdf87ole30i8450njss5lt6fh4ttn4p2.apps.googleusercontent.com',
+    	'client_secret' => 'RQkfzT_Xgw09Bz_VpwGo991M',
+    	'redirect' 		=> 'http://dronowar.no-ip.org/login/google',
+    	//'scope'         => array('email', 'profile'),
+	]
+
 ];
