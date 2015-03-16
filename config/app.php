@@ -146,6 +146,7 @@ return [
 		'App\Providers\RouteServiceProvider',
 
 		'Laravel\Socialite\SocialiteServiceProvider',
+		'App\Providers\ViewComposerServiceProvider',
 
 	],
 

@@ -3,7 +3,7 @@
 use App\Http\Controllers\Controller;
 use App\Repositories\UserRepository;
 
-use Socialize, Auth;
+use Socialize, Auth, Request;
 
 class LoginController extends Controller {
 
@@ -18,17 +18,17 @@ class LoginController extends Controller {
 	}
 
 	public function getGoogle(){
-		return loginOrCreateUser('google');
+		return $this->loginOrCreateUser('google');
 	}
 
-	private function loginOrCreateUser($service)
-		if (!$request->has('code')) return $this->getAuthorizationFirst($service);
+	private function loginOrCreateUser($service){
+		if (!Request::has('code')) return $this->getAuthorizationFirst($service);
 
 		$user = $this->users->findByUseremailOrCreate($this->getUser($service));
 
 		Auth::login($user, true);
 
-		return $redirect('/home');
+		return redirect('/home');
 
 	}
 	private function getAuthorizationFirst($service)

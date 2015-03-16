@@ -1,6 +1,8 @@
 <?php namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+//use Illuminate\Contracts\View\Factory;
+//use Auth;
 
 class AppServiceProvider extends ServiceProvider {
 

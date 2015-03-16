@@ -19,8 +19,9 @@ Route::get('logout', function(){
 	return redirect('/');
 });
 
-/*Route::get('home', 'HomeController@index');
+Route::get('home', 'HomeController@getIndex');
 
+/*
 Route::controllers([
 	'auth' => 'Auth\AuthController',
 	'password' => 'Auth\PasswordController',
