@@ -9,7 +9,7 @@ class Poster extends Model {
 	use SoftDeletes;
 
 	protected $dates = ['deleted_at'];
-	protected $fillable = ['url', 'w', 'h', 'quantity'];
+	protected $guarded = ['order_id', 'maket_status', 'poster_price'];
 
 	//
 	public static $maket_status = array(

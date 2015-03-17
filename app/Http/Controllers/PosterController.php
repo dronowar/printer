@@ -2,14 +2,16 @@
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use App\Repositories\PosterRepository;
 
 use Request;
 
-class OrderController extends Controller {
+class PosterController extends Controller {
 
-	public function __construct()
+	public function __construct(PosterRepository $poster)
 	{
 		$this->middleware('auth');
+		$this->poster = $poster;
 	}
 
 	/**
@@ -29,7 +31,7 @@ class OrderController extends Controller {
 	 */
 	public function create()
 	{
-		return view('order/create');
+		return view('poster/create');
 	}
 
 	/**
@@ -38,8 +40,10 @@ class OrderController extends Controller {
 	 * @return Response
 	 */
 	public function store()
-	{
-		return Request::all();
+	{	
+		$poster = $this->poster->CreateNewPoster(Request::all());
+		\Debugbar::info($poster);
+		return redirect('/home');
 	}
 
 	/**

@@ -19,9 +19,9 @@ Route::get('logout', function(){
 	return redirect('/');
 });
 
-Route::get('home', 'HomeController@getIndex');
-Route::get('order/create', 'OrderController@create');
-Route::post('order/store', 'OrderController@store');
+Route::get('home', 'HomeController@index');
+Route::get('poster/create', 'PosterController@create');
+Route::get('poster/store', 'PosterController@store');
 
 /*
 Route::controllers([

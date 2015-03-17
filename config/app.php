@@ -148,6 +148,7 @@ return [
 		'Laravel\Socialite\SocialiteServiceProvider',
 		'App\Providers\ViewComposerServiceProvider',
 		'Illuminate\Html\HtmlServiceProvider',
+		'Barryvdh\Debugbar\ServiceProvider',
 
 	],
 
@@ -200,6 +201,7 @@ return [
 		'Socialize' => 'Laravel\Socialite\Facades\Socialite',
 		'Form'		=> 'Illuminate\Html\FormFacade',
 		'Html'		=> 'Illuminate\Html\HtmlFacade',
+		'Debugbar'	=> 'Barryvdh\Debugbar\Facade',
 
 	],
 

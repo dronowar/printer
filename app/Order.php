@@ -25,7 +25,7 @@ class Order extends Model {
     public function user(){
         return $this->belongsTo('User');
     }
-    public function poster(){
-        return $this->hasMany('Poster')
+    public function posters(){
+        return $this->hasMany('Poster');
     }
 }

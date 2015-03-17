@@ -5,7 +5,7 @@
 @stop
 
 @section('content')
-{!! Form::open(['url' => 'order/store', 'class' => 'form-horizontal']) !!}
+{!! Form::open(['url' => 'poster/store', 'method' => 'get', 'class' => 'form-horizontal']) !!}
 
 <div class="form-group">
 	<label for="maket_url" class="col-sm-2 control-label">{{ Lang::get('messages.maket_url') }}</label>
@@ -26,21 +26,21 @@
 	</div>
 </div>
 <div class="form-group">
-	<label for="paper_size_w" class="col-sm-2 control-label">{{ Lang::get('messages.paper_size_w') }}</label>
+	<label for="paper_size_w" class="col-sm-2 control-label">{{ Lang::get('messages.w') }}</label>
 	<div class="col-sm-2">
-		{!! Form::text('paper_size_w', null, array('class' => 'form-control', 'placeholder' => 'мм')) !!}
+		{!! Form::text('w', null, array('class' => 'form-control', 'placeholder' => 'мм')) !!}
 	</div>
 </div>
 <div class="form-group">
-	<label for="paper_size_h" class="col-sm-2 control-label">{{ Lang::get('messages.paper_size_h') }}</label>
+	<label for="paper_size_h" class="col-sm-2 control-label">{{ Lang::get('messages.h') }}</label>
 	<div class="col-sm-2">
-		{!! Form::text('paper_size_h', null, array('class' => 'form-control', 'placeholder' => 'мм')) !!}
+		{!! Form::text('h', null, array('class' => 'form-control', 'placeholder' => 'мм')) !!}
 	</div>
 </div>
 <div class="form-group">
 	<label for="copies" class="col-sm-2 control-label">Число копий</label>
 	<div class="col-sm-2">
-		{!! Form::text('copies', 1, array('class' => 'form-control', 'placeholder' => 'шт.')) !!}
+		{!! Form::text('quantity', 1, array('class' => 'form-control', 'placeholder' => 'шт.')) !!}
 	</div>
 </div>
 
