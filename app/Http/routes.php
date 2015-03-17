@@ -20,6 +20,8 @@ Route::get('logout', function(){
 });
 
 Route::get('home', 'HomeController@getIndex');
+Route::get('order/create', 'OrderController@create');
+Route::post('order/store', 'OrderController@store');
 
 /*
 Route::controllers([

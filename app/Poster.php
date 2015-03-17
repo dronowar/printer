@@ -18,4 +18,8 @@ class Poster extends Model {
     	2 => 'ready_to_print',
     );
 
+    public function order(){
+    	return $this->belongsTo('Order');
+    }
+
 }
