@@ -3,6 +3,7 @@
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Repositories\PosterRepository;
+use App\Http\Requests\PosterRequest;
 
 use Request;
 
@@ -39,10 +40,10 @@ class PosterController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function store()
+	public function store(PosterRequest $request)
 	{	
-		$poster = $this->poster->CreateNewPoster(Request::all());
-		\Debugbar::info($poster);
+		$poster = $this->poster->CreateNewPoster($request::all());
+		//\Debugbar::info($poster);
 		return redirect('/home');
 	}
 

@@ -7,40 +7,59 @@
 @section('content')
 {!! Form::open(['url' => 'poster/store', 'method' => 'get', 'class' => 'form-horizontal']) !!}
 
-<div class="form-group">
+<div class="form-group @if ($errors->has('maket_url')) has-error @endif">
 	<label for="maket_url" class="col-sm-2 control-label">{{ Lang::get('messages.maket_url') }}</label>
 	<div class="col-sm-5">
 		{!! Form::text('maket_url', null, array('class' => 'form-control', 'placeholder' => 'Ссылка на макет (ala Dropbox, etc)')) !!}
+		@if ($errors->has('maket_url'))
+			<p class="bg-danger">{{ $errors->first('maket_url') }}</p>
+		@endif
 	</div>
 </div>
-<div class="form-group">
+
+<div class="form-group @if ($errors->has('paper_id')) has-error @endif">
 	<label for="paper_id" class="col-sm-2 control-label">{{ Lang::get('messages.paper_id') }}</label>
 	<div class="col-sm-5">
 		{!! Form::select('paper_id', array('' => Lang::get('messages.papers')), null, array('class' => 'form-control')) !!}
+		@if ($errors->has('paper_id'))
+			<p class="bg-danger">{{ $errors->first('paper_id') }}</p>
+		@endif
 	</div>
 </div>
-<div class="form-group">
+<div class="form-group @if ($errors->has('colors')) has-error @endif">
 	<label for="colors" class="col-sm-2 control-label">{{ Lang::get('messages.colors') }}</label>
 	<div class="col-sm-5">
 		{!! Form::select('colors', array('' => Lang::get('messages.color_count')), null, array('class' => 'form-control')) !!}
+		@if ($errors->has('colors'))
+			<p class="bg-danger">{{ $errors->first('colors') }}</p>
+		@endif
 	</div>
 </div>
-<div class="form-group">
-	<label for="paper_size_w" class="col-sm-2 control-label">{{ Lang::get('messages.w') }}</label>
+<div class="form-group @if ($errors->has('w')) has-error @endif">
+	<label for="w" class="col-sm-2 control-label">{{ Lang::get('messages.w') }}</label>
 	<div class="col-sm-2">
 		{!! Form::text('w', null, array('class' => 'form-control', 'placeholder' => 'мм')) !!}
+		@if ($errors->has('w'))
+			<p class="bg-danger">{{ $errors->first('w') }}</p>
+		@endif
 	</div>
 </div>
-<div class="form-group">
-	<label for="paper_size_h" class="col-sm-2 control-label">{{ Lang::get('messages.h') }}</label>
+<div class="form-group @if ($errors->has('h')) has-error @endif">
+	<label for="h" class="col-sm-2 control-label">{{ Lang::get('messages.h') }}</label>
 	<div class="col-sm-2">
 		{!! Form::text('h', null, array('class' => 'form-control', 'placeholder' => 'мм')) !!}
+		@if ($errors->has('h'))
+			<p class="bg-danger">{{ $errors->first('h') }}</p>
+		@endif
 	</div>
 </div>
-<div class="form-group">
-	<label for="copies" class="col-sm-2 control-label">Число копий</label>
+<div class="form-group @if ($errors->has('quantity')) has-error @endif">
+	<label for="quantity" class="col-sm-2 control-label">{{ Lang::get('messages.quantity') }}</label>
 	<div class="col-sm-2">
 		{!! Form::text('quantity', 1, array('class' => 'form-control', 'placeholder' => 'шт.')) !!}
+		@if ($errors->has('quantity'))
+			<p class="bg-danger">{{ $errors->first('quantity') }}</p>
+		@endif
 	</div>
 </div>
 
@@ -55,6 +74,7 @@
 		</div>
 	</div>
 </div>
+
 <div class="form-group">
 	<div class="col-sm-2">&nbsp;</div>
 	<div class="col-sm-3">
