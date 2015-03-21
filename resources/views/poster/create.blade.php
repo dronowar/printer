@@ -5,7 +5,7 @@
 @stop
 
 @section('content')
-{!! Form::open(['url' => 'poster/store', 'method' => 'get', 'class' => 'form-horizontal']) !!}
+{!! Form::open(['url' => 'poster/store', 'method' => 'post', 'class' => 'form-horizontal']) !!}
 
 <div class="form-group @if ($errors->has('maket_url')) has-error @endif">
 	<label for="maket_url" class="col-sm-2 control-label">{{ Lang::get('messages.maket_url') }}</label>
@@ -17,12 +17,12 @@
 	</div>
 </div>
 
-<div class="form-group @if ($errors->has('paper_id')) has-error @endif">
-	<label for="paper_id" class="col-sm-2 control-label">{{ Lang::get('messages.paper_id') }}</label>
+<div class="form-group @if ($errors->has('papers')) has-error @endif">
+	<label for="paper_id" class="col-sm-2 control-label">{{ Lang::get('messages.papers') }}</label>
 	<div class="col-sm-5">
-		{!! Form::select('paper_id', array('' => Lang::get('messages.papers')), null, array('class' => 'form-control')) !!}
-		@if ($errors->has('paper_id'))
-			<p class="bg-danger">{{ $errors->first('paper_id') }}</p>
+		{!! Form::select('paper_id', array('' => Lang::get('messages.paper_id')), null, array('class' => 'form-control')) !!}
+		@if ($errors->has('papers'))
+			<p class="bg-danger">{{ $errors->first('papers') }}</p>
 		@endif
 	</div>
 </div>

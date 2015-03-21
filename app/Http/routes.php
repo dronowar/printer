@@ -21,7 +21,9 @@ Route::get('logout', function(){
 
 Route::get('home', 'HomeController@index');
 Route::get('poster/create', 'PosterController@create');
-Route::get('poster/store', 'PosterController@store');
+Route::post('poster/store', 'PosterController@store');
+Route::get('poster/{id}/update', 'PosterController@update');
+Route::get('poster/{id}/destroy', 'PosterController@destroy');
 
 /*
 Route::controllers([

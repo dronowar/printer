@@ -1,11 +1,11 @@
 <?php namespace App\Http\Controllers;
 
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Repositories\PosterRepository;
 use App\Http\Requests\PosterRequest;
+use Illuminate\Http\Request;
 
-use Request;
+use Lang;
 
 class PosterController extends Controller {
 
@@ -75,9 +75,14 @@ class PosterController extends Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function update($id)
-	{
-		//
+	public function update(PosterRepository $poster, Request $request, $id)
+	{	
+		$this->validate($request, ['maket_url' => 'required|url']);
+		$url = $request['maket_url'];
+		$res = $this->poster->UpdateUrl($id, $url);
+		if ($res) return redirect('/home')->with('flash_message', Lang::get('messages.update_maket_url_success'));
+		return redirect('/home')->with('flash_message', Lang::get('messages.error'))->with('alert-class', 'alert-danger');
+		//return $request::all();
 	}
 
 	/**
@@ -86,9 +91,12 @@ class PosterController extends Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function destroy($id)
-	{
-		//
+	public function destroy(PosterRepository $poster, $id)
+	{	
+		$res = $this->poster->DestroyPoster($id);
+		if ($res) return redirect('/home')->with('flash_message', Lang::get('messages.destroy_poster_success'));
+		//session()->flash('flash_message','sdfsdf');
+		return redirect('home')->with('flash_message', Lang::get('messages.error'))->with('alert-class', 'alert-danger');
 	}
 
 }

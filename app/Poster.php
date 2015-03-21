@@ -14,8 +14,8 @@ class Poster extends Model {
 	//
 	public static $maket_status = array(
     	0 => 'on_modaration',
-    	1 => 'rejected',
-    	2 => 'ready_to_print',
+    	1 => 'ready_to_print',
+        2 => 'rejected',
     );
 
     public function order(){

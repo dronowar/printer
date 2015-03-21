@@ -34,8 +34,27 @@ class PosterRepository {
 		//if ($poster = Poster::find($poster->id)) $order = $poster->order()->first();
 		//$poster = Order::where('poster_id', $poster_id)->posters()->get();
 		//\Debugbar::info('poster='.serialize($poster));
-		\Debugbar::info($order);
+		//\Debugbar::info($order);
 		return $poster;
+	}
+
+	public function DestroyPoster($id){
+		$poster = Poster::find($id);
+		$order_id = $poster->order_id;
+		if ($poster->destroy($id)){
+			$count = Poster::where('order_id', $order_id)->count();
+			if($count == 0) Order::destroy($order_id);
+			return true;
+			}
+		return false;
+	}
+
+	public function UpdateUrl($id, $url){
+		$poster = Poster::find($id);
+		$poster->maket_url = $url;
+		$poster->maket_status = 0;
+		if ($poster->save()) return true;
+		return false;
 	}
 
 }

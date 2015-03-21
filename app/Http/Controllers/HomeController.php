@@ -1,5 +1,7 @@
 <?php namespace App\Http\Controllers;
 
+use Auth, App\Order;
+
 class HomeController extends Controller {
 
 	/*
@@ -29,8 +31,12 @@ class HomeController extends Controller {
 	 * @return Response
 	 */
 	public function index()
-	{
-		return view('home');
+	{	
+		$user_id = Auth::user()->id;
+		$orders = Order::where('user_id', $user_id)->where('order_status', '<', 4)->get();
+
+		//\Debugbar::info(Order::find(1)->posters);
+		return view('home')->with('orders', $orders);
 	}
 
 }
