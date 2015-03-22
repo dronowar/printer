@@ -3,7 +3,7 @@
 use App\Http\Controllers\Controller;
 use App\Repositories\UserRepository;
 
-use Socialize, Auth, Request;
+use Socialize, Auth, Request, Session;
 
 class LoginController extends Controller {
 
@@ -27,12 +27,13 @@ class LoginController extends Controller {
 		$user = $this->users->findByUseremailOrCreate($this->getUser($service));
 
 		Auth::login($user, true);
-
+		if(Session::has('maket_url')) return redirect('/poster/create');
 		return redirect('/home');
 
 	}
 	private function getAuthorizationFirst($service)
-    {
+    {	
+    	if($maket_url = Request::get('maket_url')) Session::put('maket_url', $maket_url);
         return Socialize::with($service)->redirect();
     }
 

@@ -4,7 +4,6 @@ use App\Poster;
 use App\Order;
 use Auth;
 
-
 class PosterRepository {
 
 	public function CreateNewPoster($req){
@@ -15,7 +14,7 @@ class PosterRepository {
 			$order->user_id = $user_id;
 			$order->order_status = 0;
 			$order->order_price = 2500;
-			$order->delivery_adress = '';
+			$order->delivery_adress = 'Россия, г.Тула, ул. Складская, дом 1';
 			$order->save();
 		}
 		$poster = new Poster;
@@ -29,13 +28,12 @@ class PosterRepository {
 		$poster->maket_url = $req['maket_url'];
 		$poster->quantity = $req['quantity'];
 		//$poster = Poster::create($req);
-		$poster->save();
-		
+		if ($poster->save()) return true;
 		//if ($poster = Poster::find($poster->id)) $order = $poster->order()->first();
 		//$poster = Order::where('poster_id', $poster_id)->posters()->get();
 		//\Debugbar::info('poster='.serialize($poster));
 		//\Debugbar::info($order);
-		return $poster;
+		return false;
 	}
 
 	public function DestroyPoster($id){

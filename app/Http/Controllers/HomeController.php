@@ -30,13 +30,16 @@ class HomeController extends Controller {
 	 *
 	 * @return Response
 	 */
+
+	public function test(){
+		return redirect('/home')->with('message.error', 'test info');
+	}
+
 	public function index()
 	{	
 		$user_id = Auth::user()->id;
-		$orders = Order::where('user_id', $user_id)->where('order_status', '<', 4)->get();
-
+		$orders = Order::where('user_id', $user_id)->where('order_status', '<', 4)->orderBy('created_at', 'desc')->get();
 		//\Debugbar::info(Order::find(1)->posters);
 		return view('home')->with('orders', $orders);
 	}
-
 }

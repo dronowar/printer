@@ -44,7 +44,7 @@ $(document).ready(function(){
     	var url = $("input#maket_url").val();
     	var lk = $(this).attr("href");
     	if(url) {
-	    	lkurl = lk + '/?url=' + url;
+	    	lkurl = lk + '/?maket_url=' + url;
 	    	$(this).attr("href", lkurl);
     	}
     });
@@ -52,7 +52,7 @@ $(document).ready(function(){
 });
 </script>
 	<div class="col-md-2 col-md-offset-5">
-		<button type="button" class="btn btn-primary btn-lg btn-block"data-toggle="modal" data-target=".bs-example-modal-sm">Start printing</button>
+		<button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target=".bs-example-modal-sm">Start printing</button>
 		<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
 			<div class="modal-dialog">
 				<div class="modal-content">

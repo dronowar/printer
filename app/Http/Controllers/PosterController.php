@@ -42,9 +42,10 @@ class PosterController extends Controller {
 	 */
 	public function store(PosterRequest $request)
 	{	
-		$poster = $this->poster->CreateNewPoster($request::all());
+		$res = $this->poster->CreateNewPoster($request::all());
 		//\Debugbar::info($poster);
-		return redirect('/home');
+		if ($res) return redirect('/home')->with('message.success', Lang::get('messages.poster_create_success'));
+		return redirect('/home')->with('message.error', Lang::get('messages.error'));
 	}
 
 	/**
@@ -80,8 +81,8 @@ class PosterController extends Controller {
 		$this->validate($request, ['maket_url' => 'required|url']);
 		$url = $request['maket_url'];
 		$res = $this->poster->UpdateUrl($id, $url);
-		if ($res) return redirect('/home')->with('flash_message', Lang::get('messages.update_maket_url_success'));
-		return redirect('/home')->with('flash_message', Lang::get('messages.error'))->with('alert-class', 'alert-danger');
+		if ($res) return redirect('/home')->with('message.success', Lang::get('messages.update_maket_url_success'));
+		return redirect('/home')->with('message.error', Lang::get('messages.error'));
 		//return $request::all();
 	}
 
@@ -94,9 +95,9 @@ class PosterController extends Controller {
 	public function destroy(PosterRepository $poster, $id)
 	{	
 		$res = $this->poster->DestroyPoster($id);
-		if ($res) return redirect('/home')->with('flash_message', Lang::get('messages.destroy_poster_success'));
+		if ($res) return redirect('/home')->with('message.success', Lang::get('messages.destroy_poster_success'));
 		//session()->flash('flash_message','sdfsdf');
-		return redirect('home')->with('flash_message', Lang::get('messages.error'))->with('alert-class', 'alert-danger');
+		return redirect('home')->with('message.error', Lang::get('messages.error'));
 	}
 
 }

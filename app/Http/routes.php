@@ -10,7 +10,7 @@
 | and give it the controller to call when that URI is requested.
 |
 */
-
+Route::get('/home/test', 'HomeController@test');
 
 Route::get('/', 'IndexController@getIndex');
 Route::controller('login', 'LoginController');
@@ -24,6 +24,10 @@ Route::get('poster/create', 'PosterController@create');
 Route::post('poster/store', 'PosterController@store');
 Route::get('poster/{id}/update', 'PosterController@update');
 Route::get('poster/{id}/destroy', 'PosterController@destroy');
+
+Route::get('payment/status', 'PaymentController@paymentStatus');
+Route::get('payment/{order_id}', ['as' => 'payment', 'uses' => 'PaymentController@payment']);
+
 
 /*
 Route::controllers([

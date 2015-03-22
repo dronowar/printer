@@ -10,7 +10,7 @@
 <div class="form-group @if ($errors->has('maket_url')) has-error @endif">
 	<label for="maket_url" class="col-sm-2 control-label">{{ Lang::get('messages.maket_url') }}</label>
 	<div class="col-sm-5">
-		{!! Form::text('maket_url', null, array('class' => 'form-control', 'placeholder' => 'Ссылка на макет (ala Dropbox, etc)')) !!}
+		{!! Form::text('maket_url', Session::pull('maket_url'), array('class' => 'form-control', 'placeholder' => 'Ссылка на макет (ala Dropbox, etc)')) !!}
 		@if ($errors->has('maket_url'))
 			<p class="bg-danger">{{ $errors->first('maket_url') }}</p>
 		@endif
