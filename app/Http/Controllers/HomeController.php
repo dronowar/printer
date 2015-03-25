@@ -1,6 +1,7 @@
 <?php namespace App\Http\Controllers;
 
 use Auth, App\Order;
+use Mail, Log, Queue ;
 
 class HomeController extends Controller {
 
@@ -32,7 +33,14 @@ class HomeController extends Controller {
 	 */
 
 	public function test(){
-		return redirect('/home')->with('message.error', 'test info');
+		$s = microtime(true);
+			Log::info('/n'.microtime(true) - $s);
+			Mail::queue('emails.updateUrl', ['order_id' => 1, 'maket_url' => '$poster->maket_url', 'user' =>Auth::user()->name], function($message)
+			{
+			    $message->to('admin@onpopri.com', 'Admin')->subject('Onpopri: Обвновлена ссылка на макет');
+			});
+			Log::info(microtime(true) - $s);
+		return 'message send'.(microtime(true) - $s);
 	}
 
 	public function index()

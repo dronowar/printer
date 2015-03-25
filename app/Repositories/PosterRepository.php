@@ -2,20 +2,26 @@
 
 use App\Poster;
 use App\Order;
-use Auth;
+use Auth, Mail, Log;
 
 class PosterRepository {
 
 	public function CreateNewPoster($req){
-		$user_id = Auth::user()->id;
-		$order = Order::where('user_id', '=', $user_id)->where('order_status', 0)->first();
+		$user = Auth::user();
+		//$user_id = $user()->id;
+		$order = Order::where('user_id', '=', $user->id)->where('order_status', 0)->first();
 		if (empty($order)) {
 			$order = new Order;
-			$order->user_id = $user_id;
+			$order->user_id = $user->id;
 			$order->order_status = 0;
 			$order->order_price = 2500;
 			$order->delivery_adress = 'Россия, г.Тула, ул. Складская, дом 1';
-			$order->save();
+			if($order->save()){
+				Mail::queue('emails.newOrder', ['order_id' => $order->id, 'created_at' => $order->created_at, 'name' => $user->name], function($message)
+				{
+				    $message->to($user->email, $user->name)->subject('Onpopri: Новый заказ');
+				});
+			}
 		}
 		$poster = new Poster;
 		$poster->order_id = $order->id;
@@ -29,10 +35,6 @@ class PosterRepository {
 		$poster->quantity = $req['quantity'];
 		//$poster = Poster::create($req);
 		if ($poster->save()) return true;
-		//if ($poster = Poster::find($poster->id)) $order = $poster->order()->first();
-		//$poster = Order::where('poster_id', $poster_id)->posters()->get();
-		//\Debugbar::info('poster='.serialize($poster));
-		//\Debugbar::info($order);
 		return false;
 	}
 
@@ -48,10 +50,20 @@ class PosterRepository {
 	}
 
 	public function UpdateUrl($id, $url){
+		
 		$poster = Poster::find($id);
 		$poster->maket_url = $url;
 		$poster->maket_status = 0;
-		if ($poster->save()) return true;
+		Log::info(microtime(true) - $s);
+		if ($poster->save()) {
+			Log::info(microtime(true) - $s);
+			Mail::queue('emails.updateUrl', ['order_id' => $poster->order_id, 'maket_url' => $poster->maket_url], function($message)
+			{
+			    $message->to('admin@onpopri.com', 'Admin')->subject('Onpopri: Обвновлена ссылка на макет');
+			});
+			Log::info(microtime(true) - $s);
+			return true;
+		}
 		return false;
 	}
 

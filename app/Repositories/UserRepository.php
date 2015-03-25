@@ -15,6 +15,7 @@ class UserRepository {
 	    	$user->photo = $userData->avatar;
 	    	$user->active = true;
 	    	$user->save();
+            //mail
     	}
     	return $user;
     }
