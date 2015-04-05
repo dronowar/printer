@@ -2,7 +2,7 @@
 
 use App\Poster;
 use App\Order;
-use Auth, Mail, Log;
+use Auth, Mail, Log, Cache;
 
 class PosterRepository {
 
@@ -17,6 +17,7 @@ class PosterRepository {
 			$order->order_price = 2500;
 			$order->delivery_adress = 'Россия, г.Тула, ул. Складская, дом 1';
 			if($order->save()){
+				Cache::forget('orders');
 				Mail::queue('emails.newOrder', ['order_id' => $order->id, 'created_at' => $order->created_at, 'name' => $user->name], function($message)
 				{
 				    $message->to($user->email, $user->name)->subject('Onpopri: Новый заказ');
@@ -33,17 +34,23 @@ class PosterRepository {
 		$poster->colors = $req['colors'];
 		$poster->maket_url = $req['maket_url'];
 		$poster->quantity = $req['quantity'];
-		//$poster = Poster::create($req);
-		if ($poster->save()) return true;
+		if ($poster->save()) {
+			Cache::forget('order_'.$poster->order_id.'_posters');
+			return true;
+		}
 		return false;
 	}
 
 	public function DestroyPoster($id){
 		$poster = Poster::find($id);
-		$order_id = $poster->order_id;
 		if ($poster->destroy($id)){
+			$order_id = $poster->order_id;
+			Cache::forget('order_'.$order_id.'_posters');
 			$count = Poster::where('order_id', $order_id)->count();
-			if($count == 0) Order::destroy($order_id);
+			if($count == 0) {
+				Order::destroy($order_id);
+				Cache::forget('orders');
+			}
 			return true;
 			}
 		return false;
@@ -54,14 +61,16 @@ class PosterRepository {
 		$poster = Poster::find($id);
 		$poster->maket_url = $url;
 		$poster->maket_status = 0;
-		Log::info(microtime(true) - $s);
+		//Log::info(microtime(true) - $s);
 		if ($poster->save()) {
-			Log::info(microtime(true) - $s);
-			Mail::queue('emails.updateUrl', ['order_id' => $poster->order_id, 'maket_url' => $poster->maket_url], function($message)
+			$order_id = $poster->order_id;
+			Cache::forget('order_'.$order_id.'_posters');
+			//Log::info(microtime(true) - $s);
+			Mail::queue('emails.updateUrl', ['order_id' => $order_id, 'maket_url' => $poster->maket_url], function($message)
 			{
 			    $message->to('admin@onpopri.com', 'Admin')->subject('Onpopri: Обвновлена ссылка на макет');
 			});
-			Log::info(microtime(true) - $s);
+			//Log::info(microtime(true) - $s);
 			return true;
 		}
 		return false;

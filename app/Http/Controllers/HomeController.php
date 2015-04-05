@@ -1,7 +1,9 @@
 <?php namespace App\Http\Controllers;
 
+use App\Repositories\OrderRepository;
+
 use Auth, App\Order;
-use Mail, Log, Queue ;
+use Mail, Log, Queue;
 
 class HomeController extends Controller {
 
@@ -21,9 +23,10 @@ class HomeController extends Controller {
 	 *
 	 * @return void
 	 */
-	public function __construct()
+	public function __construct(OrderRepository $order)
 	{
 		$this->middleware('auth');
+		$this->order = $order;
 	}
 
 	/**
@@ -45,9 +48,17 @@ class HomeController extends Controller {
 
 	public function index()
 	{	
-		$user_id = Auth::user()->id;
-		$orders = Order::where('user_id', $user_id)->where('order_status', '<', 4)->orderBy('created_at', 'desc')->get();
-		//\Debugbar::info(Order::find(1)->posters);
-		return view('home')->with('orders', $orders);
+		
+		$orders = $this->order->GetActiveOrders();
+		$v = $orders->toArray();
+		$i=0;
+		foreach ($orders as $order) {
+			$posters = $this->order->GetPosters($order);
+			$v[$i]['posters'] = $posters->toArray(); 
+			$i++;
+		}
+		//dd($v);
+		//\Debugbar::info($orders);
+		return view('home')->with('orders', $v);
 	}
 }
