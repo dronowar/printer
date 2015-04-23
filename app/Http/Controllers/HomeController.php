@@ -37,12 +37,10 @@ class HomeController extends Controller {
 
 	public function test(){
 		$s = microtime(true);
-			Log::info('/n'.microtime(true) - $s);
-			Mail::queue('emails.updateUrl', ['order_id' => 1, 'maket_url' => '$poster->maket_url', 'user' =>Auth::user()->name], function($message)
-			{
-			    $message->to('admin@onpopri.com', 'Admin')->subject('Onpopri: Обвновлена ссылка на макет');
-			});
-			Log::info(microtime(true) - $s);
+		Mail::queue('emails.newOrder', ['order_id' => 1, 'created_at' => 1, 'name' => 1], function($message) 
+				{
+				    $message->to('c@c.com', '1')->subject('Onpopri: Новый заказ');
+				});
 		return 'message send'.(microtime(true) - $s);
 	}
 

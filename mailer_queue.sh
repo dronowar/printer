@@ -1,0 +1,1 @@
+php artisan queue:work --sleep 30 --daemon &

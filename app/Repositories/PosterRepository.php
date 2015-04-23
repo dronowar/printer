@@ -2,13 +2,12 @@
 
 use App\Poster;
 use App\Order;
-use Auth, Mail, Log, Cache;
+use Auth, Mail, Cache;
 
 class PosterRepository {
 
 	public function CreateNewPoster($req){
 		$user = Auth::user();
-		//$user_id = $user()->id;
 		$order = Order::where('user_id', '=', $user->id)->where('order_status', 0)->first();
 		if (empty($order)) {
 			$order = new Order;
@@ -17,11 +16,7 @@ class PosterRepository {
 			$order->order_price = 2500;
 			$order->delivery_adress = 'Россия, г.Тула, ул. Складская, дом 1';
 			if($order->save()){
-				Cache::forget('orders');
-				Mail::queue('emails.newOrder', ['order_id' => $order->id, 'created_at' => $order->created_at, 'name' => $user->name], function($message)
-				{
-				    $message->to($user->email, $user->name)->subject('Onpopri: Новый заказ');
-				});
+				Cache::forget('orders_'.$user->id);
 			}
 		}
 		$poster = new Poster;
@@ -36,6 +31,22 @@ class PosterRepository {
 		$poster->quantity = $req['quantity'];
 		if ($poster->save()) {
 			Cache::forget('order_'.$poster->order_id.'_posters');
+			Mail::queue('emails.newPoster', [
+				'order_id' => $order->id, 
+				'created_at' => (string)$order->created_at, 
+				'name' => $user->name,
+				'order_price' => $order->order_price,
+				'poster_maket_url' => $poster->maket_url,
+				'poster_price' => $poster->poster_price,
+				'poster_w' => $poster->w,
+				'poster_h' => $poster->h,
+				'poster_colors' => $poster->colors,
+				'poster_paper_id' => $poster->paper_id,
+				'poster_quantity' => $poster->quantity
+				], function($message) use ($user)
+			{
+			    $message->to($user->email, $user->name)->subject('Onpopri: Новый постер');
+			});
 			return true;
 		}
 		return false;
@@ -48,8 +59,10 @@ class PosterRepository {
 			Cache::forget('order_'.$order_id.'_posters');
 			$count = Poster::where('order_id', $order_id)->count();
 			if($count == 0) {
-				Order::destroy($order_id);
-				Cache::forget('orders');
+				$order = Order::find($order_id);
+				if ($order->destroy($order_id)){
+					Cache::forget('orders_'.$order->user_id);
+				} else return false;
 			}
 			return true;
 			}
@@ -61,16 +74,13 @@ class PosterRepository {
 		$poster = Poster::find($id);
 		$poster->maket_url = $url;
 		$poster->maket_status = 0;
-		//Log::info(microtime(true) - $s);
 		if ($poster->save()) {
 			$order_id = $poster->order_id;
 			Cache::forget('order_'.$order_id.'_posters');
-			//Log::info(microtime(true) - $s);
 			Mail::queue('emails.updateUrl', ['order_id' => $order_id, 'maket_url' => $poster->maket_url], function($message)
 			{
 			    $message->to('admin@onpopri.com', 'Admin')->subject('Onpopri: Обвновлена ссылка на макет');
 			});
-			//Log::info(microtime(true) - $s);
 			return true;
 		}
 		return false;

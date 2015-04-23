@@ -1,12 +1,13 @@
 <?php namespace App\Repositories;
 
 use App\User;
+use Cache;
 
 class UserRepository {
+
  
     public function findByUseremailOrCreate($userData)
     {	
-        //var_dump($userData);
     	$user = User::whereEmail($userData->email)->first();
     	if (empty($user)) {
 	    	$user = new User;
@@ -15,8 +16,10 @@ class UserRepository {
 	    	$user->photo = $userData->avatar;
 	    	$user->active = true;
 	    	$user->save();
-            //mail
+            //need to send mail here
     	}
+
     	return $user;
     }
+
 }

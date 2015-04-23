@@ -5,6 +5,9 @@ use Auth, Mail, Cache;
 
 class OrderRepository {
 
+	protected $cache_time = 5;
+
+
 	public function GetOrderById($id){
 		return Order::find($id);
 	}
@@ -13,7 +16,7 @@ class OrderRepository {
 		$order = Order::find($id);
 		$order->order_status = 2;
 		if ($order->save()) {
-			Cache::forget('orders');
+			Cache::forget('orders_'.$order->user_id);
 			Mail::queue('emails.paymentApproved', [
 				'order_id' => $order->id, 
 				'created_at' => $order->created_at, 
@@ -29,15 +32,16 @@ class OrderRepository {
 	}
 
 	public function GetActiveOrders(){
-		$orders = Cache::remember('orders', 10, function(){
-			$user_id = Auth::user()->id;
+		$user_id = Auth::id();
+
+		$orders = Cache::remember('orders_'.$user_id, $this->cache_time, function() use ($user_id){
 			return Order::where('user_id', $user_id)->where('order_status', '<', 4)->orderBy('created_at', 'desc')->get();
 		});
 		return $orders;
 	}
 
 	public function GetPosters($order){
-		$posters = Cache::remember('order_'.$order->id.'_posters', 10, function() use ($order){
+		$posters = Cache::remember('order_'.$order->id.'_posters', $this->cache_time, function() use ($order){
 			return $order->posters;
 		});
 		return $posters;

@@ -5,6 +5,7 @@
 @stop
 
 @section('content')
+<h2>Новый постер</h2>
 {!! Form::open(['url' => 'poster/store', 'method' => 'post', 'class' => 'form-horizontal']) !!}
 
 <div class="form-group @if ($errors->has('maket_url')) has-error @endif">
