@@ -21,6 +21,10 @@ class LoginController extends Controller {
 		return $this->loginOrCreateUser('google');
 	}
 
+	public function getFacebook(){
+		return $this->loginOrCreateUser('facebook');
+	}
+
 	private function loginOrCreateUser($service){
 		if (!Request::has('code')) return $this->getAuthorizationFirst($service);
 

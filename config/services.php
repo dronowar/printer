@@ -39,6 +39,11 @@ return [
     	'client_secret' => 'RQkfzT_Xgw09Bz_VpwGo991M',
     	'redirect' 		=> 'http://dronowar.no-ip.org/login/google',
     	//'scope'         => array('email', 'profile'),
+	],
+	'facebook' => [
+		'client_id'	 => '1598590817046221',
+		'client_secret' => '09fc376e4b086c7082180c30ddd61a68',
+		'redirect' 		=> 'http://dronowar.no-ip.org/login/facebook',
 	]
 
 ];

@@ -67,7 +67,10 @@ $(document).ready(function(){
 							<img src="https://developers.google.com/accounts/images/sign-in-with-google.png" width="200"/>
 						</a>
 						<p>или</p>
-						<p>Facebook</p>
+						<a class="login" id="google_login" href="/login/facebook">
+							<img src="/images/facebook.png" width="180"/>
+						</a>
+						
 					</div>
 				</div>
 			</div>

@@ -7,6 +7,6 @@
 	</p>
 @else
     <p>Войти с помощью 
-	   <a href="/login/google">Google</a> или Facebook 
+	   <a href="/login/google">Google</a> или <a href="/login/facebook">Facebook</a>
     </p>
 @endif
