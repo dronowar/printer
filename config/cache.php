@@ -12,6 +12,8 @@ return [
 	| not explicitly specified when executing a given caching function.
 	|
 	*/
+	'enable' => true,
+	'time' => 5,
 
 	'default' => env('CACHE_DRIVER', 'file'),
 

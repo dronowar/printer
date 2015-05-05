@@ -5,8 +5,12 @@ use Auth, Mail, Cache;
 
 class OrderRepository {
 
-	protected $cache_time = 5;
+	protected $cache_on, $cache_time;
 
+	public function __construct() {
+		$this->cache_on = config('cache.enable');
+		$this->cache_time = config('cache.time');
+	}
 
 	public function GetOrderById($id){
 		return Order::find($id);
@@ -33,18 +37,27 @@ class OrderRepository {
 
 	public function GetActiveOrders(){
 		$user_id = Auth::id();
-
-		$orders = Cache::remember('orders_'.$user_id, $this->cache_time, function() use ($user_id){
-			return Order::where('user_id', $user_id)->where('order_status', '<', 4)->orderBy('created_at', 'desc')->get();
+		if($this->cache_on){
+		return Cache::remember('orders_'.$user_id, $this->cache_time, function() use ($user_id) {
+			return $this->ActiveOrders($user_id);
 		});
-		return $orders;
+		} else return $this->ActiveOrders($user_id);
 	}
 
 	public function GetPosters($order){
-		$posters = Cache::remember('order_'.$order->id.'_posters', $this->cache_time, function() use ($order){
-			return $order->posters;
+		if($this->cache_on){
+		return Cache::remember('order_'.$order->id.'_posters', $this->cache_time, function() use ($order){
+			return $this->Posters($order);
 		});
-		return $posters;
+		} else return $this->Posters($order);
+	}
+
+	private function ActiveOrders($user_id){
+		return Order::where('user_id', $user_id)->where('order_status', '<', 4)->orderBy('created_at', 'desc')->get();
+	}
+
+	private function Posters($order){
+		return $order->posters;
 	}
 
 }
