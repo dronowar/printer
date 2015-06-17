@@ -20,7 +20,7 @@ class OrderRepository {
 		$order = Order::find($id);
 		$order->order_status = 2;
 		if ($order->save()) {
-			Cache::forget('orders_'.$order->user_id);
+			if($this->cache_on) Cache::forget('orders_'.$order->user_id);
 			Mail::queue('emails.paymentApproved', [
 				'order_id' => $order->id, 
 				'created_at' => $order->created_at, 

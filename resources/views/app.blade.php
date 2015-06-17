@@ -4,6 +4,7 @@
   	<meta charset="utf-8" />
   	<link type="text/css" rel="stylesheet" href="{{ asset("css/bootstrap.min.css") }}"/>
   	<link type="text/css" rel="stylesheet" href="{{ asset("css/bootstrap-theme.min.css") }}"/>
+    <link type="text/css" rel="stylesheet" href="{{ asset("css/printer.css") }}"/>
   	<script src="{{ asset("js/jquery-2.1.3.min.js") }}"/></script>
   	<script src="{{ asset("js/bootstrap.min.js") }}"/></script>
     <title>@yield('title')</title>
