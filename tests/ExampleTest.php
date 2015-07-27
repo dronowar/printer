@@ -7,6 +7,8 @@ class ExampleTest extends TestCase {
 	 *
 	 * @return void
 	 */
+	protected $baseUrl = '';
+	
 	public function testBasicExample()
 	{
 		$response = $this->call('GET', '/');

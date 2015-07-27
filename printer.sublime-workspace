@@ -136,10 +136,7 @@
 	"buffers":
 	[
 		{
-			"contents": "<?php namespace App\\Repositories;\n\nuse App\\Order;\nuse Auth, Mail, Cache;\n\nclass OrderRepository {\n\n	protected $cache_on, $cache_time;\n\n	public function __construct() {\n		$this->cache_on = config('cache.enable');\n		$this->cache_time = config('cache.time');\n	}\n\n	public function GetOrderById($id){\n		return Order::find($id);\n	}\n\n	public function OrderPaymentApproved($id){\n		$order = Order::find($id);\n		$order->order_status = 2;\n		if ($order->save()) {\n			if($this->cache_on) Cache::forget('orders_'.$order->user_id);\n			Mail::queue('emails.paymentApproved', [\n				'order_id' => $order->id, \n				'created_at' => $order->created_at, \n				'name' => $order->user->name, \n				'order_price' => $order->order_price,\n			], function($message) use ($order)\n			{\n				$message->to($order->user->email, $order->user->name)->subject('Onpopri: Заказ оплачен');\n			});\n			return true;\n		}\n		return false;\n	}\n\n	public function GetActiveOrders(){\n		$user_id = Auth::id();\n		if($this->cache_on){\n		return Cache::remember('orders_'.$user_id, $this->cache_time, function() use ($user_id) {\n			return $this->ActiveOrders($user_id);\n		});\n		} else return $this->ActiveOrders($user_id);\n	}\n\n	public function GetPosters($order){\n		if($this->cache_on){\n		return Cache::remember('order_'.$order->id.'_posters', $this->cache_time, function() use ($order){\n			return $this->Posters($order);\n		});\n		} else return $this->Posters($order);\n	}\n\n	private function ActiveOrders($user_id){\n		return Order::where('user_id', $user_id)->where('order_status', '<', 4)->orderBy('created_at', 'desc')->get();\n	}\n\n	private function Posters($order){\n		return $order->posters;\n	}\n\n}",
 			"file": "app/Repositories/OrderRepository.php",
-			"file_size": 1691,
-			"file_write_time": 130752437309096920,
 			"settings":
 			{
 				"buffer_size": 1637,
@@ -155,6 +152,17 @@
 			}
 		},
 		{
+			"contents": "<?php namespace App\\Providers;\n\nuse Illuminate\\Support\\ServiceProvider;\nuse Auth;\n\nclass ViewComposerServiceProvider extends ServiceProvider {\n\n	/**\n	 * Bootstrap the application services.\n	 *\n	 * @return void\n	 */\n	public function boot()\n	{	\n\n			view()->composer('user', function($view){\n			$view->with('user', Auth::user());\n        	});\n\n	}\n\n	/**\n	 * Register the application services.\n	 *\n	 * @return void\n	 */\n	public function register()\n	{\n		//\n	}\n\n}\n",
+			"file": "app/Providers/ViewComposerServiceProvider.php",
+			"file_size": 459,
+			"file_write_time": 130733384059214936,
+			"settings":
+			{
+				"buffer_size": 457,
+				"line_ending": "Unix"
+			}
+		},
+		{
 			"file": "app/Repositories/UserRepository.php",
 			"settings":
 			{
@@ -163,43 +171,35 @@
 			}
 		},
 		{
+			"file": "app/Http/routes.php",
+			"settings":
+			{
+				"buffer_size": 1221,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "tests/ExampleTest.php",
+			"settings":
+			{
+				"buffer_size": 282,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "app/Http/Controllers/HomeController.php",
+			"settings":
+			{
+				"buffer_size": 1460,
+				"line_ending": "Windows"
+			}
+		},
+		{
 			"file": "resources/views/app.blade.php",
 			"settings":
 			{
-				"buffer_size": 812,
+				"buffer_size": 811,
 				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "public/css/printer.css",
-			"settings":
-			{
-				"buffer_size": 157,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "public/css/app.css",
-			"settings":
-			{
-				"buffer_size": 130943,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "config/queue.php",
-			"settings":
-			{
-				"buffer_size": 2212,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "resources/views/emails/wellcome.blade.php",
-			"settings":
-			{
-				"buffer_size": 517,
-				"line_ending": "Windows"
 			}
 		},
 		{
@@ -226,10 +226,14 @@
 	"build_varint": "",
 	"command_palette":
 	{
-		"height": 127.0,
+		"height": 392.0,
 		"last_filter": "",
 		"selected_items":
 		[
+			[
+				"",
+				"Package Control: Remove Package"
+			],
 			[
 				"Package Control: ins",
 				"Package Control: Install Package"
@@ -263,7 +267,9 @@
 		"//CUBIETRUCK/Laravel5",
 		"//CUBIETRUCK/Laravel5/app",
 		"//CUBIETRUCK/Laravel5/app/Http",
+		"//CUBIETRUCK/Laravel5/app/Providers",
 		"//CUBIETRUCK/Laravel5/app/Repositories",
+		"//CUBIETRUCK/Laravel5/config",
 		"//CUBIETRUCK/Laravel5/public",
 		"//CUBIETRUCK/Laravel5/public/css",
 		"//CUBIETRUCK/Laravel5/resources",
@@ -271,6 +277,16 @@
 	],
 	"file_history":
 	[
+		"//CUBIETRUCK/Laravel5/config/app.php",
+		"/C/Users/Dronowar/Desktop/Основание тарифа EPX",
+		"//CUBIETRUCK/Laravel5/phpinfo.php",
+		"/C/Users/Dronowar/AppData/Roaming/Sublime Text 3/Packages/Xdebug Client/Xdebug.sublime-settings",
+		"//CUBIETRUCK/Laravel5/public/css/printer.css",
+		"//CUBIETRUCK/Laravel5/config/queue.php",
+		"//CUBIETRUCK/Laravel5/resources/views/emails/wellcome.blade.php",
+		"//CUBIETRUCK/Laravel5/config/cache.php",
+		"/C/Users/Dronowar/AppData/Roaming/Sublime Text 3/Packages/User/Preferences.sublime-settings",
+		"/C/Users/Dronowar/AppData/Roaming/Sublime Text 3/Packages/User/Default (Windows).sublime-keymap",
 		"/C/Users/Dronowar/Downloads/Rate&Goods 2.X.xml",
 		"/C/Users/Dronowar/Downloads/4600338002484.xml",
 		"//CUBIETRUCK/Laravel5/printer.sublime-project",
@@ -388,17 +404,7 @@
 		"/C/users/dronowar/appdata/local/temp/sublime-sftp-browse-1426545927/dronowar_no_ip_org/var/www/laravel5/app/Providers/ViewComposerServiceProvider.php",
 		"/C/users/dronowar/appdata/local/temp/sublime-sftp-browse-1426545964/dronowar_no_ip_org/var/www/laravel5/config/app.php",
 		"/C/users/dronowar/appdata/local/temp/sublime-sftp-browse-1426532076/dronowar_no_ip_org/var/www/laravel5/app/Repositories/UserRepository.php",
-		"/C/users/dronowar/appdata/local/temp/sublime-sftp-browse-1426435990/dronowar_no_ip_org/var/www/laravel5/resources/views/app.blade.php",
-		"/C/users/dronowar/appdata/local/temp/sublime-sftp-browse-1426545332/dronowar_no_ip_org/var/www/laravel5/resources/views/user.blade.php",
-		"/C/users/dronowar/appdata/local/temp/sublime-sftp-browse-1426534756/dronowar_no_ip_org/var/www/laravel5/resources/views/index.blade.php",
-		"/C/users/dronowar/appdata/local/temp/sublime-sftp-browse-1426534949/dronowar_no_ip_org/var/www/laravel/app/views/layout.blade.php",
-		"/C/users/dronowar/appdata/local/temp/sublime-sftp-browse-1426535265/dronowar_no_ip_org/var/www/laravel5/resources/views/home.blade.php",
-		"/C/users/dronowar/appdata/local/temp/sublime-sftp-browse-1426534963/dronowar_no_ip_org/var/www/laravel/app/views/home.blade.php",
-		"/C/users/dronowar/appdata/local/temp/sublime-sftp-browse-1426538227/dronowar_no_ip_org/var/www/laravel5/app/Http/Middleware/RedirectIfAuthenticated.php",
-		"/C/users/dronowar/appdata/local/temp/sublime-sftp-browse-1426538163/dronowar_no_ip_org/var/www/laravel5/app/Http/Middleware/Authenticate.php",
-		"/C/users/dronowar/appdata/local/temp/sublime-sftp-browse-1426538116/dronowar_no_ip_org/var/www/laravel5/app/Http/Middleware/RedirectIfAuthenticated.php",
-		"/C/users/dronowar/appdata/local/temp/sublime-sftp-browse-1426536238/dronowar_no_ip_org/var/www/laravel5/app/Http/Controllers/Controller.php",
-		"/C/users/dronowar/appdata/local/temp/sublime-sftp-browse-1426536894/dronowar_no_ip_org/var/www/laravel5/app/Services/Registrar.php"
+		"/C/users/dronowar/appdata/local/temp/sublime-sftp-browse-1426435990/dronowar_no_ip_org/var/www/laravel5/resources/views/app.blade.php"
 	],
 	"find":
 	{
@@ -445,7 +451,7 @@
 	"groups":
 	[
 		{
-			"selected": 1,
+			"selected": 9,
 			"sheets":
 			[
 				{
@@ -461,8 +467,8 @@
 						"selection":
 						[
 							[
-								325,
-								325
+								1357,
+								1357
 							]
 						],
 						"settings":
@@ -477,7 +483,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 2,
 					"type": "text"
 				},
 				{
@@ -493,8 +499,40 @@
 						"selection":
 						[
 							[
-								788,
-								788
+								2207,
+								2207
+							]
+						],
+						"settings":
+						{
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": -0.0,
+						"translation.y": 912.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "app/Providers/ViewComposerServiceProvider.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 457,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								239,
+								239
 							]
 						],
 						"settings":
@@ -506,14 +544,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 399.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 9,
 					"type": "text"
 				},
 				{
-					"buffer": 2,
+					"buffer": 3,
 					"file": "app/Repositories/UserRepository.php",
 					"semi_transient": false,
 					"settings":
@@ -542,24 +580,55 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 5,
+					"stack_index": 4,
 					"type": "text"
 				},
 				{
-					"buffer": 3,
-					"file": "resources/views/app.blade.php",
+					"buffer": 4,
+					"file": "app/Http/routes.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 812,
+						"buffer_size": 1221,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								322,
-								322
+								447,
+								447
+							]
+						],
+						"settings":
+						{
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/PHP/PHP.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "tests/ExampleTest.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 282,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								165,
+								165
 							]
 						],
 						"settings":
@@ -568,31 +637,30 @@
 							"remote_loading": false,
 							"synced": false,
 							"syntax": "Packages/PHP/PHP.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
+							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
+					"stack_index": 5,
 					"type": "text"
 				},
 				{
-					"buffer": 4,
-					"file": "public/css/printer.css",
+					"buffer": 6,
+					"file": "app/Http/Controllers/HomeController.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 157,
+						"buffer_size": 1460,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								152,
-								152
+								1264,
+								1264
 							]
 						],
 						"settings":
@@ -600,22 +668,23 @@
 							"incomplete_sync": null,
 							"remote_loading": false,
 							"synced": false,
-							"syntax": "Packages/CSS/CSS.tmLanguage"
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 399.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 7,
 					"type": "text"
 				},
 				{
-					"buffer": 5,
-					"file": "public/css/app.css",
-					"semi_transient": true,
+					"buffer": 7,
+					"file": "resources/views/app.blade.php",
+					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 130943,
+						"buffer_size": 811,
 						"regions":
 						{
 						},
@@ -631,7 +700,7 @@
 							"incomplete_sync": null,
 							"remote_loading": false,
 							"synced": false,
-							"syntax": "Packages/CSS/CSS.tmLanguage",
+							"syntax": "Packages/PHP/PHP.tmLanguage",
 							"tab_size": 2,
 							"translate_tabs_to_spaces": true
 						},
@@ -639,70 +708,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 4,
-					"type": "text"
-				},
-				{
-					"buffer": 6,
-					"file": "config/queue.php",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 2212,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1131,
-								1141
-							]
-						],
-						"settings":
-						{
-							"incomplete_sync": null,
-							"remote_loading": false,
-							"synced": false,
-							"syntax": "Packages/PHP/PHP.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": -0.0,
-						"translation.y": 342.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 6,
-					"type": "text"
-				},
-				{
-					"buffer": 7,
-					"file": "resources/views/emails/wellcome.blade.php",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 517,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								41,
-								41
-							]
-						],
-						"settings":
-						{
-							"incomplete_sync": null,
-							"remote_loading": false,
-							"synced": false,
-							"syntax": "Packages/PHP/PHP.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 7,
+					"stack_index": 8,
 					"type": "text"
 				},
 				{
@@ -734,7 +740,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 8,
+					"stack_index": 1,
 					"type": "text"
 				},
 				{
@@ -750,8 +756,8 @@
 						"selection":
 						[
 							[
-								454,
-								454
+								495,
+								495
 							]
 						],
 						"settings":
@@ -762,11 +768,11 @@
 							"syntax": "Packages/PHP/PHP.tmLanguage",
 							"translate_tabs_to_spaces": false
 						},
-						"translation.x": 0.0,
+						"translation.x": -0.0,
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 9,
+					"stack_index": 0,
 					"type": "text"
 				}
 			]
@@ -811,6 +817,10 @@
 	{
 		"height": 100.0
 	},
+	"output.xdebug":
+	{
+		"height": 0.0
+	},
 	"pinned_build_system": "",
 	"project": "printer.sublime-project",
 	"replace":
@@ -824,6 +834,22 @@
 		"last_filter": "",
 		"selected_items":
 		[
+			[
+				"app",
+				"config\\app.php"
+			],
+			[
+				"exa",
+				"tests\\ExampleTest.php"
+			],
+			[
+				"home",
+				"app\\Http\\Controllers\\HomeController.php"
+			],
+			[
+				"route",
+				"app\\Http\\routes.php"
+			],
 			[
 				"or",
 				"app\\Repositories\\OrderRepository.php"
@@ -872,6 +898,75 @@
 	"selected_group": 0,
 	"settings":
 	{
+		"xdebug":
+		{
+			"hide_conflict": false,
+			"restore_index":
+			{
+				"15":
+				{
+					"group": 0,
+					"index": 0
+				},
+				"16":
+				{
+					"group": 0,
+					"index": 1
+				},
+				"17":
+				{
+					"group": 0,
+					"index": 2
+				},
+				"18":
+				{
+					"group": 0,
+					"index": 3
+				},
+				"19":
+				{
+					"group": 0,
+					"index": 6
+				},
+				"23":
+				{
+					"group": 0,
+					"index": 7
+				},
+				"28":
+				{
+					"group": 0,
+					"index": 4
+				},
+				"33":
+				{
+					"group": 0,
+					"index": 5
+				}
+			},
+			"restore_layout":
+			{
+				"cells":
+				[
+					[
+						0,
+						0,
+						1,
+						1
+					]
+				],
+				"cols":
+				[
+					0.0,
+					1.0
+				],
+				"rows":
+				[
+					0.0,
+					1.0
+				]
+			}
+		}
 	},
 	"show_minimap": true,
 	"show_open_files": false,

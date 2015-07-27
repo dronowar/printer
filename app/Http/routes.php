@@ -10,6 +10,11 @@
 | and give it the controller to call when that URI is requested.
 |
 */
+Route::get('/phpinfo', function(){
+	return phpinfo();
+});
+
+
 Route::get('/home/test', 'HomeController@test');
 
 Route::get('/', 'IndexController@getIndex');

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-  	<meta charset="utf-8" />
+  	<meta charset="utf-8"/>
   	<link type="text/css" rel="stylesheet" href="{{ asset("css/bootstrap.min.css") }}"/>
   	<link type="text/css" rel="stylesheet" href="{{ asset("css/bootstrap-theme.min.css") }}"/>
     <link type="text/css" rel="stylesheet" href="{{ asset("css/printer.css") }}"/>
